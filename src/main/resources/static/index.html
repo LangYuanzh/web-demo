@@ -1,438 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <title>光伏电站运维</title>
-  <meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
-
-  <link rel="stylesheet" href="css/bootstrap.css"  media="screen" type="text/css">
-  <!--<link rel="stylesheet" href="cs/animate.css" type="text/css" />-->
-  <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
-  <!--<link rel="stylesheet" href="css/simple-line-icons.css" type="text/css" />-->
-  <link rel="stylesheet" href="css/font.css" type="text/css" />
-  <link rel="stylesheet" href="css/app.css" type="text/css" />
-  <link rel="stylesheet" href="css/datetime/bootstrap-datetimepicker.min.css" media="screen">
-  <link rel="stylesheet" href="css/bootstrap-select.css">
-  <link rel="stylesheet" href="css/weather.css">
-  <style>
-  canvas{
-      -moz-user-select: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-  }
-  .chart-container {
-        width: 1000px;
-        margin-left: 40px;
-        margin-right: 40px;
-
-  }
-  .container {
-        width:100%;
-        margin-top:50px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-  }
-  .container2 {
-        width:80%;
-        margin-top:0px;
-        margin: auto;
-
-  }
-  .select{margin-top:6px;}
-  .block{
-    margin-top:10px;
-    margin-bottom:10px;
-    margin-left:10px;
-    height: 300px
-  }
-  .blockright{
-    margin-right:10px;
-  }
-  .blocktop{
-    height:300px
-  }
-  .blocktitle{
-    height:50px;
-    text-align:center;
-  }
-  p.blocktitletext{
-   position:relative; top:5px;
-  }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>理工云</title>
+    <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <link rel="stylesheet" href="css/index.css"/>
+    <script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
+    
 </head>
 <body>
-  <div class="app app-header-fixed" id="app">
-    <div class="app-header  bg-light  navbar">
-      <div class="navbar-header bg-dark">
-        <a href="#/" class="navbar-brand text-lt" data-toggle="class:app-aside-folded" data-target=".app">
-          <span class="hidden-folded m-l-xs">光伏监测系统</span>
-          <i class="fa fa-dedent fa-fw text"></i>
-          <i class="fa fa-indent fa-fw text-active"></i>
-        </a>
-      </div>
-    </div>
-    <!-- menu -->
-    <div class="app-aside hidden-xs bg-dark">
-      <nav ui-nav class="navi">
-          <ul class="nav ">
-              <li class="active" href="#panel-789823" data-toggle="tab">
-                <a ui-sref="app.calendar">
-                  <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
-                  <span class="font-bold">设备管理</span>
-                </a>
-              </li>
-              <li  href="#panel-124130" data-toggle="tab">
-                <a href class="auto" >
-                  <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
-                  <span class="font-bold">数据查询</span>
-                </a>
-              </li>
-          </ul>
-      </nav>
-      <div class=" wrapper app-aside-footer ">
-
-          &copy; 2018 Copyright. <a href="http://www.tongji.edu.cn/" target="_blank" title="光伏"></a>
-          <span class="pull-right">
-              <a href="#app" class="m-l-sm text-muted">
-                <i class="fa fa-long-arrow-up"></i>
-              </a>
-            </span>
-
-      </div>
-    </div>
-    <!-- chart-->
-    <div class="app-content" >
-        <div class="tab-content">
-          <div class="tab-pane active" id="panel-789823">
-              <div class="app-content-body fade-in-up bg-black">
-                  <div class="app-header bg-dark ">
-                      <div style="margin-top:10px;margin-bottom:10px;margin-left:50px;height:30px;">
-                          <ul class="nav navbar-nav">
-                                <li>
-                                  <h4 class="pull-right">系统网络状态：</h4>
-                                </li>
-                                <li>
-                                    <h4 id="system-net-state"></h4>
-                                </li>
-                                <li><a></a></li>
-                                <li>
-                                    <h4>上次更新：</h4>
-                                </li>
-                                <li>
-                                    <h4 id="updatetime"></h4>
-                                </li>
-				<li>
-                                   <button type="button" onclick="Send_to_robot('et')">环境节点</button>
-                                </li>
-                                <li>
-                                   <button type="button" onclick="Send_to_robot('pt')">功率节点</button>
-                                </li>
-                          </ul>
-                      </div>
-                  </div>
-                  <div class="hbox hbox-auto-xs hbox-auto-sm bg-black">
-                      <div class="col">
-                        <div class="bg-dark block blocktop">
-                            <div class="blocktitle">
-                                <p class="h3 text-black blocktitletext">环境参数</p>
-                            </div>
-                            <div style="margin-left:10px;margin-left:10px">
-                              <div style="margin-left:80px;height:40px">
-                                <ul class="nav navbar-nav">
-                                  <li style="position:relative;top:5px;" ><div class="sunny"></div></li>
-                                  <li style="position:relative;top:10px;left:30px" ><p class="h4">温度:</p></li>
-                                  <li style="position:relative;top:10px;left:60px"><p class="h4" id=temp></p></li>
-                                  <li style="position:relative;top:10px;left:65px;"><p class="h4">℃</p></li>
-                                </ul>
-
-                              </div>
-                              <div style="margin-left:80px;margin-right:60px;height:40px">
-                                  <ul class="nav navbar-nav">
-                                      <li style="position:relative;top:5px;" ><div class="sunny"></div></li>
-                                      <li style="position:relative;top:10px;left:30px" ><p class="h4">组件温度:</p></li>
-                                      <li style="position:relative;top:10px;left:50px"><p class="h4" id="pvtemp"></p></li>
-                                      <li style="position:relative;top:10px;left:55px;"><p class="h4">℃</p></li>
-                                    </ul>
-                              </div>
-                              <div style="margin-left:80px;height:40px">
-                                  <ul class="nav navbar-nav">
-                                      <li style="position:relative;top:5px;" ><div class="sunny"></div></li>
-                                      <li style="position:relative;top:10px;left:30px" ><p class="h4">湿度:</p></li>
-                                      <li style="position:relative;top:10px;left:50px"><p class="h4" id="hum"></p></li>
-                                      <li style="position:relative;top:10px;left:55px;"><p class="h4">%</p></li>
-                                    </ul>
-                              </div>
-                              <div style="margin-left:80px;height:40px">
-                                  <ul class="nav navbar-nav">
-                                      <li style="position:relative;top:5px;" ><div class="sunny"></div></li>
-                                      <li style="position:relative;top:10px;left:30px" ><p class="h4">总辐射:</p></li>
-                                      <li style="position:relative;top:10px;left:50px"><p class="h4" id="radiation"></p></li>
-                                      <li style="position:relative;top:10px;left:55px;"><p class="h4">w/m2</p></li>
-                                    </ul>
-                              </div>
-                              <div style="margin-left:80px;height:40px">
-                                  <ul class="nav navbar-nav">
-                                      <li style="position:relative;top:5px;" ><div class="cloudy"></div></li>
-                                      <li style="position:relative;top:10px;left:30px" ><p class="h4">PM10:</p></li>
-                                      <li style="position:relative;top:10px;left:50px"><p class="h4" id="pmten"></p></li>
-                                      <li style="position:relative;top:10px;left:55px;"><p class="h4">g/m3</p></li>
-                                    </ul>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col" >
-                          <div class="bg-dark block blocktop">
-                              <div class="blocktitle">
-                                  <p class="h3 text-black blocktitletext">汇流箱</p>
-                              </div>
-                              <div style="margin-left:40px;margin-right:40px;margin-top:15px">
-                                  <table class="table ">
-                                      <tbody>
-                                         <tr>
-                                            <td>电压</td>
-                                            <td id="volt"></td>
-                                            <td>V</td>
-                                         </tr>
-                                         <tr>
-                                            <td>清扫组件电流</td>
-                                            <td id="current1"></td>
-                                            <td>A</td>
-                                         </tr>
-                                         <tr>
-                                            <td>清扫组件电流</td>
-                                            <td id="current2"></td>
-                                            <td>A</td>
-                                         </tr>
-                                         <tr>
-                                            <td>1路电流</td>
-                                            <td id="current3"></td>
-                                            <td>A</td>
-                                         </tr>
-                                         <tr>
-                                            <td>2路电流</td>
-                                            <td id="current4"></td>
-                                            <td>A</td>
-                                         </tr>
-                                      </tbody>
-                                   </table>
-                              </div>
-                        </div>
-                      </div>
-                      <div class="col" >
-                          <div class="bg-dark block blocktop blockright">
-                              <div class="blocktitle">
-                                  <p class="h3 text-black blocktitletext">机器人状态</p>
-                              </div>
-                              <div style="margin-left:10px;margin-right:10px">
-                                  <div class="bg-black"style="margin-left:20px;margin-right:20px;height:40px">
-                                    <ul class="nav navbar-nav">
-                                      <li style="position:relative;top:10px;left:10px;"><p class="h4">网络状态：</p></li>
-                                      <li style="position:relative;top:10px;left:10px;"><p class="h4" id="robot_net"></p></li>
-                                    </ul>
-                                  </div>
-                                  <div style="margin-left:20px;margin-right:20px;height:40px">
-                                      <ul class="nav navbar-nav">
-                                        <li style="position:relative;top:10px;left:10px;"><p class="h4">运行状态：</p></li>
-                                        <li style="position:relative;top:10px;left:10px;"><p class="h4" id="robot_run"></p></li>
-                                      </ul>
-                                  </div>
-                                  <div class="bg-black"style="margin-left:20px;margin-right:20px;height:40px">
-                                        <ul class="nav navbar-nav">
-                                          <li style="position:relative;top:10px;left:10px;"><p class="h4">上次清扫：</p></li>
-                                          <li style="position:relative;top:10px;left:10px;"><p class="h4" id="sweap_record"></p></li>
-                                        </ul>
-                                  </div>
-                                  <div style="margin-left:20px;margin-right:20px;height:40px">
-                                      <ul class="nav navbar-nav">
-                                          <li style="position:relative;top:10px;left:10px;"><p class="h4">故障状态：</p></li>
-                                          <li style="position:relative;top:10px;left:10px;"><p class="h4" id="robot_wrong"></p></li>
-                                        </ul>
-                                  </div>
-                                  <div class="bg-black"style="margin-left:20px;margin-right:20px;height:40px">
-                                      <ul class="nav navbar-nav">
-                                          <li style="position:relative;top:10px;left:10px;"><p class="h4">运行周期：</p></li>
-                                          <li style="position:relative;top:10px;left:10px;"><p class="h4" id="robot_period"></p></li>
-                                        </ul>
-                                  </div>
-                              </div>
-
-                          </div>
-                      </div>
-                  </div>
-                  <div class="hbox hbox-auto-xs hbox-auto-sm bg-black">
-                      <div class="col">
-                        <div class="bg-dark block ">
-                            <div class="blocktitle">
-                                <p class="h3 text-black blocktitletext">组件对照</p>
-                            </div>
-                            <div class=" " style="margin-left:10px;margin-right:10px">
-                              <div class="container2">
-                                <canvas id="canvas2"></canvas>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="bg-dark block blockright">
-                            <div class="blocktitle">
-                              <p class="h3 text-black blocktitletext">机器人控制</p>
-                            </div>
-                            <div class="bg-black"style="margin-left:50px;margin-right:50px">
-                              <div style="margin-left:20px;margin-right:20px;height:50px;">
-                                <ul class="nav navbar-nav">
-                                  <li style="position:relative;top:10px;left:40px;">
-                                     <button type="button" class="btn btn-sm btn-success btn-rounded" onclick="Send_to_robot('rf')">前进</button>
-                                    </li>
-                                  <li style="position:relative;top:15px;left:80px;"><p class="h4">启动电机正转</p></li>
-                                </ul>
-                              </div>
-                              <div style="margin-left:20px;margin-right:20px;height:50px">
-                                  <ul class="nav navbar-nav">
-                                    <li style="position:relative;top:10px;left:40px;">
-                                      <button type="button" class="btn btn-sm btn-success btn-rounded" onclick="Send_to_robot('rb')">后退</button>
-                                     </li>
-                                     <li style="position:relative;top:15px;left:80px;"><p class="h4">启动电机反转</p></li>
-                                  </ul>
-                              </div>
-                              <div style="margin-left:20px;margin-right:20px;height:50px">
-                                    <ul class="nav navbar-nav">
-                                      <li style="position:relative;top:10px;left:40px;">
-                                        <button type="button" class="btn btn-sm btn-success btn-rounded" onclick="Send_to_robot('rp')">停止</button>
-                                        </li>
-                                        <li style="position:relative;top:15px;left:80px;"><p class="h4">停止电机</p></li>
-                                    </ul>
-                              </div>
-                              <div style="margin-left:20px;margin-right:20px;height:50px">
-                                  <ul class="nav navbar-nav">
-                                      <li style="position:relative;top:10px;left:40px;">
-                                        <button type="button" class="btn btn-sm btn-success btn-rounded" onclick="Send_to_robot('rc')">往返</button>
-                                      </li>
-                                      <li style="position:relative;top:15px;left:80px;"><p class="h4">启动机器自动往返一次</p></li>
-                                    </ul>
-                              </div>
-
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="tab-pane" id="panel-124130">
-              <div class="app-content-body fade-in-up">
-                <div class="app-header">
-                  <div class="" style="margin-top:10px;margin-bottom:10px;margin-left:10px;width:100%;height:30px;">
-                    <p>历史数据 <input class="form_datetime" id="start" vale='' readonly> - <input class="form_datetime" id="end" value='' readonly>
-                       选择数据
-                       <select class="selectpicker select" multiple="true" val="环境温度">
-                          <optgroup label="环境参数">
-                            <option>tempreature</option>
-                            <option>humidity</option>
-                            <option>pm25</option>
-                            <option>pm10</option>
-                            <option>pvtempreature</option>
-                            <option>radiation</option>
-                          </optgroup>
-                          <optgroup label="发电参数">
-                            <option>vlot</option>
-                            <option>current1</option>
-                            <option>current2</option>
-                            <option>current3</option>
-                            <option>current4</option>
-                            <option>current5</option>
-                            <option>current6</option>
-                            <option>current7</option>
-                            <option>current8</option>
-                            <option>current12</option>
-                            <option>current13</option>
-                            <option>current14</option>
-                            <option>current15</option>
-                            <option>current16</option>
-                          </optgroup>
-                        </select>
-                    </p>
-                  </div>
-                </div>
-                <div class="container">
-                    <div class="chart-container">
-                      <canvas id="canvas"></canvas>
-                    </div>
-                </div>
-              </div>
+<!--主体-->
+<div class="main clearfix">
+    <div class="main-left">
+        <div class="border-container containertop">
+            <h5 class="name-title tile-size-color">
+                                设备状态
+            </h5>
+            <div id="radar">
+            	<div class="radarkong">
+            		<p class="tile-size-color">设备总数 :<span class="Totalequipment"> 660个</span>统计时间 :<span> 2019.03.26 15:28</span></p>
+            	</div>
+            	<div class="pie-chart" id="pie-chart"></div>
+            	<ul class="SiteStatusList">
+            		<li><i class="Statusnormal Statussame"></i>正常：<span>556</span></li>
+            		<li><i class="Statusemergency Statussame"></i>告警：<span>40</span></li>
+            		<li><i class="StatusOffline Statussame"></i>离线：<span>30</span></li>
+            	</ul>
+            </div> 
+        </div>
+        
+        <div class="border-container containerbottom">
+            <div class="name-title tile-size-color">
+              	 设备类型分布
             </div>
-          </div>
+            <div class="graduateyear">
+            	<div class="bar-chart" id="bar-chart"></div>
+            	<ul class="SiteStatusList">
+            		<li>本周数据</li>
+            		<li class="DataSwitch"><i class="ThisweekData Datasame" onClick="DataSwitch(this,1)"></i><i class="ThisweekData" onClick="DataSwitch(this,2)"></i></li>
+            		<li class="Defaultgray">本月数据</li>
+            	</ul>
+            </div>
+           
+            
         </div>
     </div>
-  </div>
+    <div class="main-middle">
+        <div class="border-container containertop">
+        	<div class="name-title tile-size-color">
+              	 故障设备区域分布情况
+            </div>
+           <div id="mapadd">
+           		<div class="mapleft">
+           			<div class="progress2-chart" id="progress2-chart">
+	           		</div>
+	           		<a href="###" class="progressMore">更多&gt;</a>
+           		</div>
+           		
+           		<div class="map-chart" id="map-chart">
+           			
+           		</div>
+           		<ul class="Devicestatus-List">
+           			<li class="Online2">65.5%
+           				<span class="DevicestatusName">在线</span>
+           			</li>
+           			<li class="Online2">10.5%
+           				<span class="DevicestatusName">离线</span>
+           			</li>
+           			<li class="Online2">10.5%
+           				<span class="DevicestatusName">维护</span>
+           			</li>
+           			<li class="Online2">9.5%
+           				<span class="DevicestatusName">故障</span>
+           			</li>
+           		</ul>
+           		
+           </div>
+        </div>
+        <div class="border-container containerbottom borderno-container">
+            <ul class="teacher-pie clearfix">
+                <li class="teacherList">
+                    <div class="name-title tile-size-color">
+                                                故障时段分布
+                    </div>
+                    <div id="courserate">
+                    	<div class="line-chart" id="line-chart"></div>
+                    	<ul class="SiteStatusList">
+		            		<li><i class="Statusnormal Statussame"></i>合计故障次数 <span>556</span></li>
+		            		
+		            	</ul>
+                    </div>
+                </li>
+                <li class="teacherList">
+                    <div class="name-title tile-size-color">
+                       	故障类型分布
+                    </div>
+                    <div class="bars-chart" id="bars-chart"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-right">
+        <div class="border-container containertop">
+            <div class="name-title tile-size-color">
+               	优秀区域排名
+            </div>
+            <div class="progress1-chart" id="progress1-chart"></div>
+        </div>
+        <div class="border-container containerbottom">
+            <div class="name-title tile-size-color">
+             	故障类型分布
+            </div>
+          	<div id="radar-chart" class="radar-chart">
+          	
+         	</div>
+           
+        </div>
+    </div>
+</div>
 
-  <script  src="myjs/jquery/jquery-3.3.1.min.js" charset="UTF-8"></script>
-  <script  src="myjs/bootstrap/bootstrap.min.js"></script>
-  <script  src="myjs/datetime/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-  <script  src="myjs/datetime/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript" src="js/echarts.js"></script>
+<script type="text/javascript" src="js/new_file.js"></script>
+<script type="text/javascript" src="js/maps.js"></script>
 
-  <!--<script  src="myjs/web_socket.js"></script>
-  <script  src="myjs/swfobject.js"></script>-->
-
-  <script src="Chart.js/dist/Chart.bundle.js"></script>
-  <script src="Chart.js/samples/utils.js"></script>
-  <script src="myjs/robot.js"></script>
-  <script src="myjs/chartnew.js"></script>
-  <script src="myjs/bootstrap-select.js"></script>
-  <!-- jQuery -->
-  <!--<script src="vendor/jquery/bootstrap.js"></script>-->
-  <script type="text/javascript">
-    +function ($) {
-      $(function(){
-        // class
-          $(document).on('click', '[data-toggle^="class"]', function(e){
-            e && e.preventDefault();
-            console.log('abc');
-            var $this = $(e.target), $class , $target, $tmp, $classes, $targets;
-            !$this.data('toggle') && ($this = $this.closest('[data-toggle^="class"]'));
-            $class = $this.data()['toggle'];
-            $target = $this.data('target') || $this.attr('href');
-            $class && ($tmp = $class.split(':')[1]) && ($classes = $tmp.split(','));
-            $target && ($targets = $target.split(','));
-            $classes && $classes.length && $.each($targets, function( index, value ) {
-              if ( $classes[index].indexOf( '*' ) !== -1 ) {
-                var patt = new RegExp( '\\s' +
-                    $classes[index].
-                      replace( /\*/g, '[A-Za-z0-9-_]+' ).
-                      split( ' ' ).
-                      join( '\\s|\\s' ) +
-                    '\\s', 'g' );
-                $($this).each( function ( i, it ) {
-                  var cn = ' ' + it.className + ' ';
-                  while ( patt.test( cn ) ) {
-                    cn = cn.replace( patt, ' ' );
-                  }
-                  it.className = $.trim( cn );
-                });
-              }
-              ($targets[index] !='#') && $($targets[index]).toggleClass($classes[index]) || $this.toggleClass($classes[index]);
-            });
-            $this.toggleClass('active');
-        });
-
-        // collapse nav
-        $(document).on('click', 'nav a', function (e) {
-          var $this = $(e.target), $active;
-          $this.is('a') || ($this = $this.closest('a'));
-
-          $active = $this.parent().siblings( ".active" );
-          $active && $active.toggleClass('active').find('> ul:visible').slideUp(200);
-
-          ($this.parent().hasClass('active') && $this.next().slideUp(200)) || $this.next().slideDown(200);
-          $this.parent().toggleClass('active');
-
-          $this.next().is('ul') && e.preventDefault();
-
-          setTimeout(function(){ $(document).trigger('updateNav'); }, 300);
-        });
-      });
-    }(jQuery);
-  </script>
 </body>
 </html>

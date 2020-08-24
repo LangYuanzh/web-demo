@@ -2,6 +2,7 @@ package com.example.webdemo.controller;
 
 import com.example.webdemo.dao.Environment;
 import com.example.webdemo.service.EnvironmentService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,8 +24,12 @@ public class UserController {
     }
 
     @RequestMapping("lastdata")
-    public List<Environment> findLastData(){
-        return environmentService.findLastData();
+    public JSONObject findLastData(){
+        JSONObject object = new JSONObject (  );
+        object.put ( "status",200 );
+        object.put ( "msg","ok" );
+        object.put ( "data",environmentService.findLastData());
+        return object;
     }
 
 
